@@ -5,7 +5,7 @@ isim varchar(30),
 sehir varchar(30),
 maas int,
 sirket varchar(20),
-adres varchar(50)
+adres varchar(50)    
 );
 --Varolan personel tablosundan pers_id,sehir,adres fieldlarına sahip personel_adres adında yeni tablo olusturalım
 create table personel_adres
@@ -43,7 +43,7 @@ CREATE TABLE ogrenciler2
 id serial,
 isim VARCHAR(50),
 veli_isim VARCHAR(50),
-yazili_notu real
+yazili_notu real       
 );
 Begin;
 insert into ogrenciler2 VALUES (default,'Ali Can','Hasan Can',75.5);
@@ -59,9 +59,9 @@ commit;
 --sayacta en son hangi sayıda kaldıysa ordan devam eder
 -- NOT : PostgreSQL de transaction kullanımı için 'Begin' komutuyla başlarız sonrasında tekrar yanlış bir veriyi
 -- düzeltmek veya bizim için önemli olan verilerden sonra ekleme yapabilmek için 'SAVEPOINT savepointadi'
--- kullanırız ve bu savepointe dönebilmek için 'ROLLBACK TO savepointismi'
--- komutunu kullanırız ve rollback çalıştırıldığında savepoint yazdığımız satırın üstündeki verileri tabloda bize
--- verir ve son olarak Transaction'ı sonlandırmak için mutlaka 'COMMIT' komutu kullanırız. MySQL de
+-- kullanırız ve bu savepointe dönebilmek için 'ROLLBACK TO savepointismi' 
+-- komutunu kullanırız ve rollback çalıştırıldığında savepoint yazdığımız satırın üstündeki verileri tabloda bize 
+-- verir ve son olarak Transaction'ı sonlandırmak için mutlaka 'COMMIT' komutu kullanırız. MySQL de 
 -- transaction olmadanda kullanılır
 -- DML - DELETE -
 --DELETE FROM tablo_adi --> Tablo'nun tüm içeriğini siler
@@ -72,7 +72,7 @@ CREATE TABLE ogrenciler
 id int,
 isim VARCHAR(50),
 veli_isim VARCHAR(50),
-yazili_notu int
+yazili_notu int       
 );
 INSERT INTO ogrenciler VALUES(123, 'Ali Can', 'Hasan',75);
 INSERT INTO ogrenciler VALUES(124, 'Merve Gul', 'Ayse',85);
@@ -91,45 +91,35 @@ DELETE FROM ogrenciler WHERE isim ='Nesibe Yilmaz' or isim = 'Mustafa Bak';
 delete from ogrenciler WHERE isim='Ali Can' or id=123;
 -- Tablodaki tüm verileri silelim
 Delete from ogrenciler
-
-
-
-
+-- DELETE - TRUNCATE --
+-- TRUNCATE komutu DELETE komutu gibi bir tablodaki verilerin tamamını siler.
+-- Ancak, seçmeli silme yapamaz
 select * from ogrenciler;
-
--- delete  - TRUNCATE KOMUTU
--- bu komut bir tabloadiki tüm verileri siler
---ANCAK SEÇMELİ SİLME YAPAMAZ
-
-TRUNCATE TABLE ogrenciler;
-
--- DDL - Data Definition Lang.
+TRUNCATE TABLE ogrenciler
+-- DDL - Data Definition Lang. 
 -- CREATE - ALTER - DROP
 -- ALTER TABLE --
--- ALTER TABLE tabloda ADD, TYPE, SET,
--- RENAME veya DROP COLUMNS işlemleri için kullanılır
--- Personel tablosuna cinsiyet Varchar(20) ve yas 
--- int seklinde yeni sutunlar ekleyiniz
-
+-- ALTER TABLE tabloda ADD, TYPE, SET, RENAME veya DROP COLUMNS işlemleri için kullanılır
+--Personel isminde bir tablo oluşturalım
+create table personel(
+pers_id int,
+isim varchar(30),
+sehir varchar(30),
+maas int,
+sirket varchar(20),
+adres varchar(50)    
+);
+select * from isciler;
+-- Personel tablosuna cinsiyet Varchar(20) ve yas int seklinde yeni sutunlar ekleyiniz
 alter table personel add cinsiyet varchar(20), add yas int;
-
-select * from isciler;
-
--- Personel tablosundan şirket fieldını ( sütununu) silin
-alter table personel drop COLUMN sirket;
-
+--Personel tablosundan sirket field'ini siliniz
+alter table personel drop column sirket;
 -- Personel tablosundaki sehir sutununun adını ulke olarak değiştirelim
-alter table personel rename COLUMN sehir to ulke;
-
+alter table personel RENAME column sehir to ulke;
 -- Personel tablosunun adını isciler olarak değiştiriniz
-alter table personel rename  to isciler;
-
-select * from isciler;
-
--- DDL DROP komutu
-drop table isciler;
-
-
+alter table personel rename to isciler;
+-- DDL - DROP komutu
+DROP table isciler;
 -- CONSTRANINT -- Kısıtlamalar
 -- Primary Key --> Bir sutunun NULL içermemesini ve sutundaki verilerin BENZERSİZ olmasını sağlar (NOT NULL - UNIQUE)
 -- FOREGIN KEY --> Başka bir tablodaki PRİMARY KEY'i referans göstermek için kullanılır. Böylelikle, tablolar arasında ilişki kurmuş oluruz.
@@ -137,50 +127,37 @@ drop table isciler;
 -- NOT NULL --> Bir sutunun NULL içermemesini yani boş olmamasını sağlar
 -- NOT NULL kısıtlaması için CONSTRAINT ismi tanımlanmaz. Bu kısıtlama veri türünden hemen sonra yerleştirilir
 -- CHECK --> Bir sutuna yerleştirilebilecek değer aralığını sınırlamak için kullanılır.
-
-CREATE TABLE calisanlar(
+CREATE TABLE calisanlar
+(
 id CHAR(5) PRIMARY KEY, -- not null + unique
-isim VARCHAR(50) UNIQUE,
-maas int NOT NULL,
+isim VARCHAR(50) UNIQUE, -- UNIQUE --> Bir sutundaki tüm değerlerin BENZERSİZ yani tek olmasını sağlar
+maas int NOT NULL, -- NOT NULL --> Bir sutunun NULL içermemesini yani boş olmamasını sağlar
 ise_baslama DATE
 );
-
-CREATE TABLE calisanlar2(
-id CHAR(5),
-isim VARCHAR(50),
-maas int NOT NULL,
-ise_baslama DATE,
-CONSTRAINT pk_id PRIMARY KEY(id),
-CONSTRAINT ism_unq UNIQUE(isim)
-);
-
 INSERT INTO calisanlar VALUES('10002', 'Mehmet Yılmaz' ,12000, '2018-04-14');
 INSERT INTO calisanlar VALUES('10008', null, 5000, '2018-04-14');
-INSERT INTO calisanlar VALUES('10010', Mehmet Yılmaz, 5000, '2018-04-14'); --UNIQ olmaz
+INSERT INTO calisanlar VALUES('10010', Mehmet Yılmaz, 5000, '2018-04-14'); --Unique
 INSERT INTO calisanlar VALUES('10004', 'Veli Han', 5000, '2018-04-14');
 INSERT INTO calisanlar VALUES('10005', 'Mustafa Ali', 5000, '2018-04-14');
-INSERT INTO calisanlar VALUES('10006', 'Canan Yaş', NULL, '2019-04-12'); -- NOT NULL
+INSERT INTO calisanlar VALUES('10006', 'Canan Yaş', NULL, '2019-04-12'); --NOT NULL
 INSERT INTO calisanlar VALUES('10003', 'CAN', 5000, '2018-04-14');
-INSERT INTO calisanlar VALUES('10007', 'CAN', 5000, '2018-04-14'); -- UNIQ
-INSERT INTO calisanlar VALUES('10009', 'cem', '', '2018-04-14'); -- NOT NULL
-INSERT INTO calisanlar VALUES('', 'osman', 2000, '2018-04-14'); -- bunu kabul eder. boş ta olsa
-INSERT INTO calisanlar VALUES('', 'osman can', 2000, '2018-04-14'); -- ikincide olmaz , çünkü üst satırda 
-INSERT INTO calisanlar VALUES( '10002', 'ayse Yılmaz' ,12000, '2018-04-14'); -- 10002  zarten vardı
-INSERT INTO calisanlar VALUES( null, 'filiz ' ,12000, '2018-04-14'); -- nul olmaz Primarketyde
-
-select * from calisanlar;
-
---- FOREIGN KEY
-create table adresler(
+INSERT INTO calisanlar VALUES('10007', 'CAN', 5000, '2018-04-14'); --UNIQUE
+INSERT INTO calisanlar VALUES('10009', 'cem', '', '2018-04-14'); --NOT NULL
+INSERT INTO calisanlar VALUES('', 'osman', 2000, '2018-04-14');
+INSERT INTO calisanlar VALUES('', 'osman can', 2000, '2018-04-14'); --PRIMARY KEY
+INSERT INTO calisanlar VALUES( '10002', 'ayse Yılmaz' ,12000, '2018-04-14'); --PRIMARY KEY
+INSERT INTO calisanlar VALUES( null, 'filiz ' ,12000, '2018-04-14'); -- PRIMARY KEY
+select * from calisanlar
+-- FOREIGN KEY--
+CREATE TABLE adresler
+(
 adres_id char(5),
-	sokak varchar(20),
-	cadde varchar(30),
-	sehir varchar(20),
-	CONSTRAINT id_fk FOREIGN key (adres_id) REFERENCES calisanlar(id)
+sokak varchar(20),
+cadde varchar(30),
+sehir varchar(20),
+CONSTRAINT id_fk FOREIGN KEY (adres_id) REFERENCES calisanlar(id)   
 );
-
 INSERT INTO adresler VALUES('10003','Mutlu Sok', '40.Cad.','IST');
 INSERT INTO adresler VALUES('10003','Can Sok', '50.Cad.','Ankara');
 INSERT INTO adresler VALUES('10002','Ağa Sok', '30.Cad.','Antep');
-
 select * from adresler;
