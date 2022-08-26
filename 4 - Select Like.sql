@@ -36,6 +36,8 @@ select * from personel where isim ~~* 'A_____a%';
 --Sondan ikinci karakteri 'r' olan "isim" değerlerini listeleyiniz.
 select isim from personel where isim like '%r_'
 
+select isim from personel where isim similar to 'A[l-y]%n'
+
 
 
 
