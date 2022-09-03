@@ -97,3 +97,16 @@ select ulke, sehir from personel group by ulke,sehir
 -- Personelin, ulkelere ve şehirlere göre calışan sayısını sorgulayın.
 select ulke, sehir, count(sehir) as calisan_sayisi from personel group by ulke,sehir
 
+-- Her ulke için bay ve bayan çalışan sayısı ve yaş ortalamasını sorgulayınız.
+select ulke,cinsiyet, count(*) as calisan_sayisi, avg (yas) as yas_ortalamasi 
+from personel group by ulke, cisiyet;
+
+-- Her ulke için; bay ve bayan çalışan sayısı, yaş ortalamasını,
+-- maaşı 30000 den büyük olanları-- ve ortalama yaşı
+-- büyükten küçüğe doğru sıralayınız.
+SELECT ulke, cinsiyet, round(avg(yas)) as ortalama_yas, count(*) 
+from personel
+where maas>30000
+group by ulke, cinsiyet
+order by ortalama_yas desc
+
